@@ -3,7 +3,14 @@ import streamlit as st
 import streamlit.components.v1 as components
 from mitosheet.streamlit.v1 import spreadsheet
 import pygwalker as pyg
-from dtale.views import startup
+import dtale
+
+def st_dtale_report(dtale_app):
+    # Embed the dtale report in Streamlit using an iframe
+    report_url_path = dtale_app._main_url_path()
+    report_url = f"{st._get_report_url()}/{report_url_path}"
+    st.markdown(f'<iframe src="{report_url}" width="100%" height="800px"></iframe>', unsafe_allow_html=True)
+
 
 # Read the data
 df = pd.read_csv("supermarket_sales - Sheet1.csv")
@@ -49,8 +56,16 @@ if selected_tab == "D-Tale Profiling Report":
     )
     
     # Use D-Tale to generate and display the report
-    dtale_app = startup(data_id="1", data=df)
-    components.html('<iframe src="/dtale/main/1" width="100%" height="600"></iframe>', height=600, scrolling=True)
+    # dtale_app = startup(data_id="1", data=df)
+    # components.html('<iframe src="/dtale/main/1" width="100%" height="600"></iframe>', height=600, scrolling=True)
+
+    dtale_report = dtale.show(df)
+   # Get the dtale report URL
+    # Get the dtale report URL
+    report_url = dtale_report._url
+
+    # Render dtale report within Streamlit using iframe
+    st.markdown(f'<iframe src="{report_url}" width="100%" height="600"></iframe>', unsafe_allow_html=True)
     st.video("recording.mkv")
 
 # Mito Sheet Tab
