@@ -1,0 +1,1 @@
+web: sh setup.sh && dtale-streamlit run app.py
